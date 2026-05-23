@@ -1,0 +1,142 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 3dcd5bbe90534f9e8eb5c2d53756af63
+      name: Templates/Power
+  templates:
+    - uuid: 13de73e7e3934c1195d091cbbba7b50c
+      template: 'DEXP UPS 3000VA Windows Script'
+      name: 'DEXP UPS 3000VA Windows Script'
+      description: 'Полный шаблон мониторинга для DEXP 3000VA через PowerShell на Windows Server'
+      groups:
+        - name: Templates/Power
+      items:
+        - uuid: 033746f3594a406692432a2c44913140
+          name: 'UPS: Статус (AVR Активен)'
+          type: ZABBIX_ACTIVE
+          key: ups.avr.active
+          triggers:
+            - uuid: 7dcbd11900b04158a342436fa22adc3f
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.avr.active)=1'
+              name: 'UPS: Активен стабилизатор напряжения (AVR)'
+              priority: WARNING
+              description: 'ИБП выравнивает напряжение в сети'
+        - uuid: 28f99a31b3464b4f91c3a85839b81460
+          name: 'UPS: Заряд батареи'
+          type: ZABBIX_ACTIVE
+          key: ups.battery.level
+          value_type: FLOAT
+          units: '%'
+          triggers:
+            - uuid: 88954ddf13334cb8b90bf90c4633f77e
+              expression: 'nodata(/DEXP UPS 3000VA Windows Script/ups.battery.level,10m)'
+              name: 'UPS: Нет данных о заряде батареи'
+              priority: HIGH
+            - uuid: 8bd67c77204748d49b1e5dd64121de52
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.battery.level)<20'
+              name: 'UPS: Низкий заряд батареи (ниже 20%)'
+              priority: DISASTER
+              description: 'ИБП скоро отключит нагрузку. Требуется немедленное вмешательство.'
+        - uuid: 94128b398d444a75809cb2b0939ae41e
+          name: 'UPS: Напряжение батареи'
+          type: ZABBIX_ACTIVE
+          key: ups.battery.voltage
+          value_type: FLOAT
+          units: V
+          triggers:
+            - uuid: d8390c4e31c447d397e0ed1c3432c5a3
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.battery.voltage)<100'
+              name: 'UPS: Низкое напряжение батареи'
+              priority: WARNING
+        - uuid: d73e731918a24f8eadb6df4604c83419
+          name: 'UPS: Статус (Ошибка)'
+          type: ZABBIX_ACTIVE
+          key: ups.error.status
+          triggers:
+            - uuid: 0c9eadf3feb6439cb8719307aa0c3b5f
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.error.status)=1'
+              name: 'UPS: ОШИБКА ИБП'
+              priority: HIGH
+        - uuid: 0e4b4442bd9648318d8cfd62d4f1f78c
+          name: 'UPS: Частота сети'
+          type: ZABBIX_ACTIVE
+          key: ups.frequency
+          value_type: FLOAT
+          units: Hz
+          triggers:
+            - uuid: 72544021e9c74ed3b6fbab316cb51f6b
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.frequency)<48 or last(/DEXP UPS 3000VA Windows Script/ups.frequency)>52'
+              name: 'UPS: Частота сети вне нормы'
+              priority: INFO
+        - uuid: bf37a4b2559a4d0690eacf246e58580a
+          name: 'UPS: Входное напряжение'
+          type: ZABBIX_ACTIVE
+          key: ups.input.voltage
+          value_type: FLOAT
+          description: 'Входное напряжение из розетки'
+          triggers:
+            - uuid: 3e21e8479716415e940258c4db70f560
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.input.voltage)<190 or last(/DEXP UPS 3000VA Windows Script/ups.input.voltage)>250'
+              name: 'UPS: Критическое входное напряжение'
+              priority: WARNING
+              description: 'Входное напряжение вне допустимого диапазона 190-250V'
+        - uuid: cff82adbc0d94bf5827ed91440d50e25
+          name: 'UPS: Нагрузка'
+          type: ZABBIX_ACTIVE
+          key: ups.load.percent
+          value_type: FLOAT
+          units: '%'
+          triggers:
+            - uuid: 2a2bed82dca44900b8af0d153ce83930
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.load.percent)>80'
+              name: 'UPS: Высокая нагрузка'
+              priority: WARNING
+        - uuid: b0e6891279684ad2b9cc38bbefb5f219
+          name: 'UPS: Статус (Низкий заряд)'
+          type: ZABBIX_ACTIVE
+          key: ups.low.battery
+          triggers:
+            - uuid: 7d44c0bcc7bf44ef8486ac0ac3b03dcc
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.low.battery)=1'
+              name: 'UPS: Статус низкого заряда'
+              priority: HIGH
+        - uuid: 22b5ce6dde0c4665b451e7afe5fc108d
+          name: 'UPS: Статус (Работа от батареи)'
+          type: ZABBIX_ACTIVE
+          key: ups.on.battery
+          triggers:
+            - uuid: 2309a6e8fc774065b8679320fd2fbf9a
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.on.battery)=1'
+              name: 'UPS: Работает от батареи'
+              priority: AVERAGE
+        - uuid: a95579a70e8e4ecda4f5d62bf8108b83
+          name: 'UPS: Выходное напряжение'
+          type: ZABBIX_ACTIVE
+          key: ups.output.voltage
+          value_type: FLOAT
+          units: V
+          triggers:
+            - uuid: 55bd5449e7584180995a92eca58f6ba9
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.output.voltage)<190 or last(/DEXP UPS 3000VA Windows Script/ups.output.voltage)>250'
+              name: 'UPS: Нестабильное выходное напряжение'
+              priority: WARNING
+        - uuid: 1e11a8016c36453a90c51cbcf8db7a6a
+          name: 'UPS: Статус (Перегрузка)'
+          type: ZABBIX_ACTIVE
+          key: ups.overload
+          triggers:
+            - uuid: 50105ae5f4494b49afc02dd2d2596400
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.overload)=1'
+              name: 'UPS: ПЕРЕГРУЗКА'
+              priority: HIGH
+        - uuid: e1526eefb03f41bbacd2b6e57fc680ee
+          name: 'UPS: Температура'
+          type: ZABBIX_ACTIVE
+          key: ups.temperature
+          value_type: FLOAT
+          units: °C
+          triggers:
+            - uuid: 278bdfd96f2844d98739dad73de3521b
+              expression: 'last(/DEXP UPS 3000VA Windows Script/ups.temperature)>40'
+              name: 'UPS: Высокая температура'
+              priority: WARNING
