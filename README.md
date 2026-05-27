@@ -78,18 +78,21 @@ UserParameter=ups.avr.active,powershell -NoProfile -ExecutionPolicy Bypass -File
 UserParameter=ups.error.status,powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Scripts\Get-UPSData.ps1" -Metric "ErrorStatus"
 UserParameter=ups.overload,powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Scripts\Get-UPSData.ps1" -Metric "Overload"
 ```
+### 3. Скопируйте скрипт
 
-### 3. Настройте UPS Lite Manager
+Скопируйте файл Get-UPSData.ps1 в папку C:\Scripts\
+
+
+### 4. Установите и Настройте UPS Lite Manager
 
 > ⚠️ **Важно:** Шаблон работает только при включённом логировании в программе.
 
-1. Откройте **UPS Lite Manager** → **Настройки** → вкладка **Логи**
-
-2. Настройте **Лог важных событий**:
+Откройте **UPS Lite Manager** → **Настройки** → вкладка **Логи**
+Настройте **Лог важных событий**:
    - ✅ Включите: `Лог важных событий`
    - Путь: `C:\Program Files\UPS_LM\UPS_LM_events.log`
 
-3. Настройте **Лог изменений состояния**:
+Настройте **Лог изменений состояния**:
    - ✅ Включите: `Лог изменений состояния`
    - Путь: `C:\Program Files\UPS_LM\UPS_LM_state.log`
    - ✅ **Отметьте все параметры:**
@@ -109,8 +112,8 @@ UserParameter=ups.overload,powershell -NoProfile -ExecutionPolicy Bypass -File "
    - ✅ Включите: `Записывать только изменившийся параметр`
    - ✅ Включите: `Игнорировать небольшие изменения напряжения сети` → установите **2.0 V**
 
-4. **Отключите** (не требуются):
+**Отключите** (не требуются):
    - ❌ `Лог опроса ИБП` (занимает ~20Мб/день)
    - ❌ `Лог терминала`
 
-5. Нажмите **Применить**
+
